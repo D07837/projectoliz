@@ -1,17 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
-
-    int opcion = 0;
-
-    char sala[4][5] = {
-        {'L','L','X','L','L'},
-        {'L','R','L','L','L'},
-        {'X','L','L','L','L'},
-        {'L','L','R','L','L'}
-    };
-
+void pantallaInicio(){
     system("cls");
 
     printf("\033[36m");
@@ -25,40 +15,15 @@ int main() {
     printf("\nInicializando sistema...\n\n");
 
     for(int i = 0; i < 10; i++) {
-
         printf("#");
         fflush(stdout);
-
         system("timeout /t 1 > nul");
     }
-
-    printf("\n\nSistema cargado correctamente.\n\n");
-
-    system("pause");
-
-    while(opcion != 4) {
-
-        system("cls");
-
-        printf("\033[36m");
-
-        printf("====================================\n");
-        printf("             CINEMAX\n");
-        printf("====================================\n\n");
-
-        printf("\033[0m");
-
-        printf("\033[32m[1]\033[0m Ver sala\n");
-        printf("\033[33m[2]\033[0m Reservar asiento\n");
-        printf("\033[31m[3]\033[0m Cancelar reserva\n");
-        printf("\033[36m[4]\033[0m Salir\n\n");
-
-        printf("Seleccione una opcion: ");
-        scanf("%d", &opcion);
-
-        if(opcion == 1) {
-
-            system("cls");
+        printf("\n\nSistema cargado correctamente.\n\n");
+        system("pause");
+}
+void mostrarMapa(char sala[4][5]){
+    system("cls");
 
             printf("\n");
             printf("====================================\n");
@@ -98,65 +63,121 @@ int main() {
 
             printf("\n");
             system("pause");
+}
+int Menu(){
+    int opcion;
+
+        system("cls");
+
+        printf("\033[36m");
+
+        printf("====================================\n");
+        printf("             CINEMAX\n");
+        printf("====================================\n\n");
+
+        printf("\033[0m");
+
+        printf("\033[32m[1]\033[0m Ver sala\n");
+        printf("\033[33m[2]\033[0m Reservar asiento\n");
+        printf("\033[31m[3]\033[0m Cancelar reserva\n");
+        printf("\033[36m[4]\033[0m Salir\n\n");
+
+        printf("Seleccione una opcion: ");
+        scanf("%d", &opcion);
+        
+        return opcion;
+}
+void Reservar(char sala[4][5]){
+    system("cls");
+    mostrarMapa(sala);
+    char fila;
+    int columna;
+
+
+        printf("\033[33m");
+
+        printf("====================================\n");
+        printf("        RESERVA DE ASIENTOS\n");
+        printf("====================================\n");
+
+        printf("\033[0m");
+
+        printf("selecciona la fila: ");
+        scanf(" %c", &fila);
+            
+        printf("\n selecciona la columna: ");
+        scanf("%d", &columna);
+            
+        int f=fila-'A';
+        int c=columna-1;
+            
+        if(sala[f][c]=='L'){
+            sala[f][c]='R';
+            printf("\n asiento reservado");
+        }
+        else{
+            printf("\n asiento ocupado");
         }
 
-        else if(opcion == 2) {
+        printf("\n");
+        system("pause");
+}
+void Cancelar(char sala[4][5]){
+    system("cls");
+    mostrarMapa(sala);
+    char fila;
+    int columna;
 
-            system("cls");
+        printf("\033[33m");
 
-            printf("\033[33m");
+        printf("====================================\n");
+        printf("        CANCELACION DE RESERVA\n");
+        printf("====================================\n");
 
-            printf("====================================\n");
-            printf("        RESERVA DE ASIENTOS\n");
-            printf("====================================\n");
-
-            printf("\033[0m");
-
-            printf("\nFuncion en desarrollo...\n");
-
-            printf("\n");
-            system("pause");
+        printf("selecciona la fila: ");
+        scanf(" %c", &fila);
+            
+        printf("\n selecciona la columna: ");
+        scanf("%d", &columna);
+            
+        int f=fila-'A';
+        int c=columna-1;
+            
+        if(sala[f][c]=='R'){
+            sala[f][c]='L';
+            printf("\n asiento cancelado");
+        }
+        else{
+            printf("\n asiento sin reservar");
         }
 
-        else if(opcion == 3) {
+        printf("\n");
+        system("pause");
+}
+int main() {
 
-            system("cls");
-
-            printf("\033[31m");
-
-            printf("====================================\n");
-            printf("       CANCELAR RESERVACION\n");
-            printf("====================================\n");
-
-            printf("\033[0m");
-
-            printf("\nFuncion en desarrollo...\n");
-
-            printf("\n");
-            system("pause");
-        }
-
-        else if(opcion == 4) {
-
-            system("cls");
-
-            printf("\033[36m");
-
-            printf("====================================\n");
-            printf("      GRACIAS POR USAR CINEMAX\n");
-            printf("====================================\n");
-
-            printf("\033[0m");
-        }
-
-        else {
-
-            printf("\n\033[31mOpcion invalida.\033[0m\n");
-
-            printf("\n");
-            system("pause");
+int opcion = 0;
+char sala[4][5] = {
+        {'L','L','X','L','L'},
+        {'L','R','L','L','L'},
+        {'X','L','L','L','L'},
+        {'L','L','R','L','L'}
+    };
+pantallaInicio();
+    while(opcion != 4) {
+        opcion = Menu();
+        switch(opcion) {
+            case 1:
+            mostrarMapa(sala); break;
+            case 2:
+            Reservar(sala); break;
+            case 3:
+            Cancelar(sala); break;
+            case 4:
+            printf("Gracias por usar CINEMAX\n"); break;
+            default:
+                printf("Opcion invalida\n");
         }
     }
-
     return 0;
 }
