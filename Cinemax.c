@@ -342,18 +342,48 @@ void venderAsiento(struct Asiento **sala, int filas, int columnas) {
     system("pause");
 }
 
+void Leer(int *filas, int *columnas){
+    FILE *archivo=fopen("guardado.txt", "r");
+    if(archivo==NULL){
+        archivo = fopen("guardado.txt", "w");
+        fprintf(archivo, "4 5");
+        fclose(archivo);
+        *filas=4;
+        *columnas=5;
+        return;
+    }
+    fscanf(archivo, "%d %d", filas, columnas);
+    fclose(archivo);
+}
+void Guardar(struct Asiento **sala, int filas, int columnas){
+    FILE *archivo=fopen("sala.dat","wb");
+    if(archivo==NULL){
+        printf("error");
+        return;
+    }
+    fclose(archivo);
+}
+void Cargar(struct Asiento **sala, int filas, int columnas){
+    FILE *archivo=fopen("sala.dat","rb");
+    if(archivo==NULL){
+        inicializarSala(sala, filas, columnas);
+        return;
+    }
+    fclose(archivo);
+}
+
 int main() {
 
     int opcion = 0;
-    int filas = 4;
-    int columnas = 5;
+    int filas, columnas;
+    Leer(&filas, &columnas);
     int contadorID = 1;
 
     struct Asiento **sala;
 
     sala = crearSala(filas, columnas);
 
-    inicializarSala(sala, filas, columnas);
+    Cargar(sala, filas, columnas);
 
     pantallaInicio();
 
@@ -390,7 +420,7 @@ int main() {
                 break;
         }
     }
-
+    Guardar(sala, filas, columnas);
     liberarSala(sala, filas, columnas);
 
     return 0;
