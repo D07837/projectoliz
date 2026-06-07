@@ -361,6 +361,22 @@ void Guardar(struct Asiento **sala, int filas, int columnas){
         printf("error");
         return;
     }
+    for(int i=0; i<filas; i++){
+        for(int j=0; j<columnas; j++){
+            fwrite(&sala[i][j].fila, sizeof(int), 1, archivo);
+            fwrite(&sala[i][j].columna, sizeof(int), 1, archivo);
+            fwrite(&sala[i][j].estado, sizeof(char), 1, archivo);
+            fwrite(&sala[i][j].idReserva, sizeof(int), 1, archivo);
+            int longitud=0;
+            if(sala[i][j].nombreCliente!=NULL){
+                longitud=strlen(sala[i][j].nombreCliente);
+            }
+            fwrite(&longitud, sizeof(int), 1, archivo);
+            if(longitud>0) {
+            fwrite(sala[i][j].nombreCliente, sizeof(char), longitud,  archivo);
+            }
+        }
+    }
     fclose(archivo);
 }
 void Cargar(struct Asiento **sala, int filas, int columnas){
@@ -368,6 +384,24 @@ void Cargar(struct Asiento **sala, int filas, int columnas){
     if(archivo==NULL){
         inicializarSala(sala, filas, columnas);
         return;
+    }
+    for(int i=0; i<filas; i++){
+        for(int j=0; j<columnas; j++){
+            fread(&sala[i][j].fila, sizeof(int), 1, archivo);
+            fread(&sala[i][j].columna, sizeof(int), 1, archivo);
+            fread(&sala[i][j].estado, sizeof(char), 1, archivo);
+            fread(&sala[i][j].idReserva, sizeof(int), 1, archivo);
+            int longitud;
+            fread(&longitud, sizeof(int), 1, archivo);
+            if(longitud>0){
+                sala[i][j].nombreCliente=(char *)malloc(longitud + 1);
+                fread(sala[i][j].nombreCliente, sizeof(char), longitud, archivo);
+                sala[i][j].nombreCliente[longitud]='\0';
+            }
+            else{
+                sala[i][j].nombreCliente=NULL;
+            }
+        }
     }
     fclose(archivo);
 }
